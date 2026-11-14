@@ -3,229 +3,208 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>FLUXO — Performance Logística | Erick Amorim</title>
-<meta name="description" content="FLUXO: dashboard de performance logística com 95 mil pedidos reais da Olist. Prazo, lead time por etapa, atraso por estado e satisfação do cliente.">
-<meta name="theme-color" content="#07090d">
-<meta property="og:title" content="FLUXO — Performance Logística">
-<meta property="og:description" content="Dashboard de performance logística com 95 mil pedidos reais da Olist.">
+<title>FLUXO — Torre de controle logística | Erick Amorim</title>
+<meta name="description" content="FLUXO: painel de performance logística com 95 mil pedidos reais da Olist. Prazo, lead time por etapa, atraso por estado e satisfação do cliente.">
+<meta name="theme-color" content="#081122">
+<meta property="og:title" content="FLUXO — Torre de controle logística">
+<meta property="og:description" content="Painel de performance logística com 95 mil pedidos reais da Olist.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;700;800&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#07090d;--s1:#0e1117;--s2:#141820;--line:#1f2530;--grid:#1a1f29;--tx:#f2f4f5;--mut:#949aa6;--mut2:#666d7a;--acc:#2ee6c5;--accd:rgba(46,230,197,.12);--bad:#ff7a50}
+:root{--bg:#081122;--s1:#0d1a31;--s2:#12223e;--line:#1d3052;--grid:#16264a;--tx:#eef3fb;--mut:#8ea0bf;--mut2:#5f7397;--acc:#ff6a2b;--accd:rgba(255,106,43,.12);--ok:#3ddc97}
 *{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth;scroll-padding-top:90px}
+html{scroll-behavior:smooth;scroll-padding-top:120px}
 html,body{overflow-x:hidden}
-body{background:var(--bg);color:var(--tx);font-family:Manrope,system-ui,sans-serif;line-height:1.5;-webkit-font-smoothing:antialiased;background-image:radial-gradient(rgba(255,255,255,.035) 1px,transparent 1px);background-size:24px 24px}
+body{background:var(--bg);color:var(--tx);font-family:"IBM Plex Sans",system-ui,sans-serif;line-height:1.5;-webkit-font-smoothing:antialiased;
+  background-image:linear-gradient(rgba(120,160,230,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(120,160,230,.05) 1px,transparent 1px);background-size:40px 40px}
 a{color:inherit;text-decoration:none}
-svg.i{width:19px;height:19px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
-.disp{font-family:Unbounded,sans-serif;letter-spacing:-.02em}
+.mono{font-family:"IBM Plex Mono",monospace}
+svg.i{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.wrap{max-width:1240px;margin:0 auto;padding:0 28px}
 
-/* sidebar */
-.side{position:fixed;left:0;top:0;bottom:0;width:240px;background:#0a0c11;border-right:1px solid var(--line);padding:22px 16px;display:flex;flex-direction:column;z-index:30}
-.brand{display:flex;align-items:center;gap:12px;padding:0 6px 22px}
-.brand .lg{width:44px;height:44px;border-radius:14px;background:var(--acc);display:grid;place-items:center;color:#06110f}
-.brand b{display:block;font-family:Unbounded;font-size:18px;letter-spacing:.02em}
-.brand span{font-size:12px;color:var(--mut);font-weight:600}
-.nlab{font-size:11px;font-weight:800;letter-spacing:.16em;color:var(--mut2);padding:8px 10px}
-.nav a{display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:14px;font-weight:700;font-size:14.5px;color:#c4c8d0;margin-bottom:2px;transition:background .2s,color .2s}
-.nav a:hover{background:var(--s2);color:#fff}
-.nav a.on{background:var(--acc);color:#06110f}
-.sfoot{margin-top:auto;background:var(--s2);border:1px solid var(--line);border-radius:16px;padding:14px;font-size:12px;color:var(--mut)}
-.sfoot b{display:flex;align-items:center;gap:8px;color:var(--tx);font-size:13px;margin-bottom:4px}
-.sfoot b i{width:8px;height:8px;border-radius:50%;background:var(--acc);box-shadow:0 0 10px var(--acc)}
-.sfoot a{display:inline-flex;align-items:center;gap:6px;margin-top:10px;color:var(--acc);font-weight:800}
-
-main{margin-left:240px;padding:0 34px 80px}
-.wrap{max-width:1120px;margin:0 auto}
-.topf{position:sticky;top:0;z-index:20;background:rgba(7,9,13,.85);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);margin:0 -34px;padding:14px 34px;border-bottom:1px solid var(--line)}
-.topf .wrap{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
-.seg{display:flex;background:var(--s2);border:1px solid var(--line);border-radius:99px;padding:4px;gap:2px}
-.seg button{border:0;background:none;color:var(--mut);font:800 13px Manrope,sans-serif;padding:8px 14px;border-radius:99px;cursor:pointer}
-.seg button.on{background:var(--acc);color:#06110f}
-.sel{display:flex;align-items:center;gap:8px;background:var(--s2);border:1px solid var(--line);border-radius:99px;padding:4px 5px 4px 14px;font-weight:700;font-size:13px;color:var(--mut)}
-.sel select{background:#0b0e13;color:var(--tx);border:1px solid var(--line);border-radius:99px;padding:7px 12px;font:700 13px Manrope,sans-serif}
-.reset{border:1px solid var(--line);background:none;color:var(--mut);font:700 13px Manrope,sans-serif;padding:9px 14px;border-radius:99px;cursor:pointer}
+/* header */
+.head{position:sticky;top:0;z-index:30;background:rgba(8,17,34,.94);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.bar{display:flex;align-items:center;gap:26px;height:64px}
+.logo{display:flex;align-items:center;gap:10px;font-family:"Space Grotesk";font-weight:700;font-size:20px;letter-spacing:.06em}
+.logo i{width:30px;height:30px;background:var(--acc);display:grid;place-items:center;color:#1a0a02}
+.logo small{font-family:"IBM Plex Mono";font-weight:500;font-size:11px;letter-spacing:.08em;color:var(--mut);border-left:1px solid var(--line);padding-left:10px;margin-left:2px;text-transform:uppercase}
+.tabs{display:flex;gap:2px;height:100%;margin-left:auto}
+.tabs a{display:flex;align-items:center;padding:0 14px;font-weight:600;font-size:14px;color:var(--mut);border-bottom:2px solid transparent;transition:color .2s,border-color .2s}
+.tabs a:hover{color:var(--tx)}
+.tabs a.on{color:var(--tx);border-bottom-color:var(--acc)}
+.port{font-family:"IBM Plex Mono";font-size:12px;color:var(--mut);border:1px solid var(--line);padding:7px 10px;display:flex;align-items:center;gap:6px}
+.port:hover{color:var(--acc);border-color:var(--acc)}
+.fil{border-top:1px solid var(--line);background:rgba(13,26,49,.8)}
+.fil .wrap{display:flex;flex-wrap:wrap;align-items:center;gap:10px;padding-top:10px;padding-bottom:10px}
+.fl{font-family:"IBM Plex Mono";font-size:11px;letter-spacing:.12em;color:var(--mut2);text-transform:uppercase;margin-right:4px}
+.seg{display:flex;border:1px solid var(--line)}
+.seg button{border:0;border-right:1px solid var(--line);background:none;color:var(--mut);font:600 13px "IBM Plex Sans",sans-serif;padding:7px 14px;cursor:pointer}
+.seg button:last-child{border-right:0}
+.seg button.on{background:var(--acc);color:#1a0a02}
+select{background:var(--s1);color:var(--tx);border:1px solid var(--line);padding:7px 10px;font:600 13px "IBM Plex Sans",sans-serif;border-radius:0}
+.reset{border:1px solid var(--line);background:none;color:var(--mut);font:600 13px "IBM Plex Sans",sans-serif;padding:7px 12px;cursor:pointer}
 .reset:hover{color:var(--tx)}
-.fnote{margin-left:auto;font-size:13px;color:var(--mut2);font-weight:700}
+.fnote{margin-left:auto;font-family:"IBM Plex Mono";font-size:12px;color:var(--mut)}
+.fnote b{color:var(--ok);font-weight:600}
 
-.hero{padding:34px 0 6px}
-.hero h1{font-family:Unbounded;font-size:clamp(30px,4vw,46px);font-weight:800;letter-spacing:-.03em;line-height:1.05}
-.hero p{color:var(--mut);margin-top:10px;font-size:15.5px;max-width:720px}
-.kpis{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin-top:22px}
-.kpi{background:var(--s1);border:1px solid var(--line);border-radius:22px;padding:18px}
-.kpi small{display:block;font-size:12.5px;font-weight:700;color:var(--mut)}
-.kpi b{display:block;font-family:Unbounded;font-size:25px;font-weight:700;letter-spacing:-.03em;margin-top:8px;line-height:1.1}
-.kpi b em{font-family:Manrope;font-style:normal;font-size:13px;color:var(--mut);font-weight:700;margin-left:4px;letter-spacing:0}
-.kpi span{display:block;font-size:12px;color:var(--mut2);margin-top:6px;font-weight:600}
-.kpi.hero{background:linear-gradient(140deg,#5ff2d8,var(--acc));border-color:var(--acc);color:#06110f}
-.kpi.hero small,.kpi.hero span,.kpi.hero b em{color:rgba(0,0,0,.62)}
-.insight{margin-top:14px;background:var(--s1);border:1px solid var(--line);border-radius:18px;padding:16px 20px;color:#d2d6dc;font-size:15px}
-.insight b{color:var(--tx)}
+/* status */
+.status{padding:36px 0 0}
+.tag{font-family:"IBM Plex Mono";font-size:12px;letter-spacing:.14em;color:var(--acc);text-transform:uppercase;display:flex;align-items:center;gap:8px}
+.tag i{width:8px;height:8px;background:var(--ok);border-radius:50%;box-shadow:0 0 0 4px rgba(61,220,151,.15)}
+.status h1{font-family:"Space Grotesk";font-size:clamp(32px,4.4vw,54px);font-weight:700;letter-spacing:-.02em;line-height:1.02;margin:12px 0 10px;max-width:900px}
+.status p{color:var(--mut);max-width:760px;font-size:15.5px}
+.kpis{display:grid;grid-template-columns:repeat(6,1fr);margin-top:26px;border:1px solid var(--line);background:var(--s1)}
+.kpi{padding:18px 18px 16px;border-right:1px solid var(--line);position:relative}
+.kpi:last-child{border-right:0}
+.kpi small{display:block;font-family:"IBM Plex Mono";font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--mut)}
+.kpi b{display:block;font-family:"IBM Plex Mono";font-size:28px;font-weight:600;margin-top:10px;line-height:1;letter-spacing:-.02em}
+.kpi b em{font-style:normal;font-size:13px;color:var(--mut);margin-left:4px}
+.kpi span{display:block;font-size:12px;color:var(--mut2);margin-top:8px}
+.kpi.hero{background:var(--acc);color:#1a0a02}
+.kpi.hero small,.kpi.hero span,.kpi.hero b em{color:rgba(26,10,2,.7)}
+.insight{display:flex;gap:14px;margin-top:14px;border:1px solid var(--line);border-left:3px solid var(--acc);background:var(--s1);padding:14px 18px;font-size:15px;color:#d6e0f0}
+.insight .lbl2{font-family:"IBM Plex Mono";font-size:11px;letter-spacing:.12em;color:var(--acc);white-space:nowrap;padding-top:3px}
+.insight b{color:#fff}
 
-section.blk{padding-top:52px}
-.bh{display:flex;align-items:center;gap:14px;margin-bottom:18px}
-.bh .ic{width:44px;height:44px;border-radius:14px;background:var(--accd);color:var(--acc);display:grid;place-items:center}
-.bh h2{font-family:Unbounded;font-size:24px;font-weight:700;letter-spacing:-.02em}
-.bh p{color:var(--mut);font-size:14px}
+section.blk{padding-top:56px}
+.sh{display:flex;align-items:baseline;gap:16px;border-bottom:1px solid var(--line);padding-bottom:12px;margin-bottom:16px}
+.sh .n{font-family:"IBM Plex Mono";font-size:13px;color:var(--acc)}
+.sh h2{font-family:"Space Grotesk";font-size:26px;font-weight:700;letter-spacing:-.01em}
+.sh p{margin-left:auto;color:var(--mut);font-size:14px}
 .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:14px}
-.card{background:var(--s1);border:1px solid var(--line);border-radius:24px;padding:22px 22px 16px;position:relative;min-width:0}
-.card h3{font-size:16.5px;font-weight:800;letter-spacing:-.01em}
+.card{background:var(--s1);border:1px solid var(--line);padding:20px 20px 14px;position:relative;min-width:0}
+.card:before{content:"";position:absolute;left:-1px;top:-1px;width:14px;height:14px;border-left:2px solid var(--acc);border-top:2px solid var(--acc)}
+.card h3{font-family:"Space Grotesk";font-size:17px;font-weight:700}
 .card p.d{font-size:13px;color:var(--mut);margin:3px 0 12px}
-.c12{grid-column:span 12}.c8{grid-column:span 8}.c4{grid-column:span 4}.c6{grid-column:span 6}.c7{grid-column:span 7}.c5{grid-column:span 5}
+.c12{grid-column:span 12}.c6{grid-column:span 6}
 .chart{position:relative;width:100%}
 .chart svg{display:block;width:100%;overflow:visible}
-.ax text{fill:var(--mut2);font:600 11px Manrope,sans-serif}
-.lbl{fill:var(--tx);font:700 12px Manrope,sans-serif}
-.lbl.m{fill:var(--mut);font-weight:600}
-.tip{position:absolute;pointer-events:none;background:#0a0d12;border:1px solid #2a313d;border-radius:12px;padding:10px 12px;font-size:12.5px;color:var(--tx);box-shadow:0 14px 30px rgba(0,0,0,.5);white-space:nowrap;opacity:0;transition:opacity .12s;z-index:50}
-.tip b{display:block;font-size:13px;margin-bottom:4px}
+.ax text{fill:var(--mut2);font:500 11px "IBM Plex Mono",monospace}
+.lbl{fill:var(--tx);font:600 12px "IBM Plex Mono",monospace}
+.lbl.m{fill:var(--mut);font:500 12px "IBM Plex Sans",sans-serif}
+.tip{position:absolute;pointer-events:none;background:#060d1b;border:1px solid var(--acc);padding:10px 12px;font-size:12.5px;color:var(--tx);box-shadow:0 14px 30px rgba(0,0,0,.5);white-space:nowrap;opacity:0;transition:opacity .12s;z-index:50;font-family:"IBM Plex Sans"}
+.tip b{display:block;font-family:"IBM Plex Mono";font-size:12px;color:var(--acc);margin-bottom:4px;text-transform:uppercase}
 .tip span{color:var(--mut)}
 .hit{fill:transparent;cursor:pointer}
 details.tbl{margin-top:10px}
-details.tbl summary{cursor:pointer;font-size:13px;font-weight:800;color:var(--acc);list-style:none}
+details.tbl summary{cursor:pointer;font-family:"IBM Plex Mono";font-size:12px;color:var(--acc);list-style:none;letter-spacing:.06em}
 details.tbl summary::-webkit-details-marker{display:none}
-details.tbl table{width:100%;border-collapse:collapse;margin-top:10px;font-size:13px}
+details.tbl table{width:100%;border-collapse:collapse;margin-top:10px;font-size:13px;font-family:"IBM Plex Mono"}
 details.tbl th,details.tbl td{text-align:right;padding:6px 8px;border-bottom:1px solid var(--line)}
 details.tbl th:first-child,details.tbl td:first-child{text-align:left}
-details.tbl th{color:var(--mut);font-weight:700}
+details.tbl th{color:var(--mut);font-weight:500}
 .empty{color:var(--mut);font-size:14px;padding:30px 0;text-align:center}
-.note{display:flex;gap:12px;background:var(--accd);border:1px solid rgba(46,230,197,.3);border-radius:16px;padding:14px 16px;font-size:14px;color:#d8f7f1;margin-bottom:14px}
-.note svg{color:var(--acc);margin-top:1px}
+.alert{display:flex;gap:10px;align-items:center;border:1px dashed var(--line);padding:10px 14px;font-size:13.5px;color:var(--mut);margin-bottom:14px}
+.alert svg{color:var(--acc)}
 .met{display:grid;grid-template-columns:1.3fr 1fr;gap:14px}
 .met ul{list-style:none;display:grid;gap:10px;margin-top:10px;color:var(--mut);font-size:14.5px}
+.met li{padding-left:16px;position:relative}
+.met li:before{content:"›";position:absolute;left:0;color:var(--acc);font-weight:700}
 .met li b{color:var(--tx)}
 .met p{color:var(--mut);font-size:14.5px;margin-top:8px}
-.btn{display:inline-flex;align-items:center;gap:8px;font-weight:800;font-size:14px;padding:12px 18px;border-radius:14px;margin:16px 8px 0 0}
-.btn.pri{background:var(--acc);color:#06110f}
-.btn.out{border:1px solid #2f3643}
+.btn{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:14px;padding:11px 16px;margin:16px 8px 0 0;border:1px solid var(--line)}
+.btn.pri{background:var(--acc);border-color:var(--acc);color:#1a0a02}
 .btn.out:hover{border-color:var(--acc);color:var(--acc)}
-footer{margin-top:50px;padding-top:22px;border-top:1px solid var(--line);color:var(--mut2);font-size:13px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+footer{margin:50px 0 30px;padding-top:18px;border-top:1px solid var(--line);color:var(--mut2);font-family:"IBM Plex Mono";font-size:12px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
 footer a{color:var(--mut)}
-.mnav{display:none}
 
-@media (max-width:1200px){.kpis{grid-template-columns:repeat(3,1fr)}}
-@media (max-width:1000px){.c8,.c4,.c6,.c7,.c5{grid-column:span 12}.met{grid-template-columns:1fr}}
-@media (max-width:860px){
-  .side{display:none}
-  main{margin-left:0;padding:0 18px 110px}
-  .topf{margin:0 -18px;padding:12px 18px;position:static}
-  .mbrand{display:flex!important}
-  .mnav{display:flex;position:fixed;left:50%;bottom:14px;transform:translateX(-50%);z-index:40;background:rgba(20,24,32,.94);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid var(--line);border-radius:99px;padding:6px;gap:2px;box-shadow:0 18px 40px rgba(0,0,0,.5)}
-  .mnav a{display:grid;place-items:center;width:46px;height:46px;border-radius:99px;color:var(--mut)}
-  .mnav a.on{background:var(--acc);color:#06110f}
+@media (max-width:1150px){.kpis{grid-template-columns:repeat(3,1fr)}.kpi:nth-child(3){border-right:0}.kpi:nth-child(-n+3){border-bottom:1px solid var(--line)}.logo small{display:none}}
+@media (max-width:1000px){.c6{grid-column:span 12}.met{grid-template-columns:1fr}.sh p{display:none}}
+@media (max-width:820px){
+  .wrap{padding:0 16px}.bar{gap:12px}.port{display:none}
+  .tabs{overflow-x:auto;margin-left:0;scrollbar-width:none}.tabs::-webkit-scrollbar{display:none}
+  .bar{height:auto;flex-wrap:wrap;padding-top:10px}.tabs{width:100%;height:42px}.tabs a{white-space:nowrap;padding:0 10px}
+  .head{position:sticky}.fil{position:static}
+  .kpis{grid-template-columns:1fr 1fr}.kpi{border-right:1px solid var(--line)!important;border-bottom:1px solid var(--line)}.kpi:nth-child(2n){border-right:0!important}
+  .kpi b{font-size:22px}.fnote{margin-left:0}
 }
-@media (max-width:600px){.kpis{grid-template-columns:1fr 1fr}.kpi b{font-size:21px}.fnote{margin-left:0}}
-.mbrand{display:none;align-items:center;gap:10px;padding:18px 0 0}
-.mbrand .lg{width:38px;height:38px;border-radius:12px;background:var(--acc);display:grid;place-items:center;color:#06110f}
-.mbrand b{font-family:Unbounded;font-size:16px}
 </style>
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
-  <symbol id="logo" viewBox="0 0 24 24"><path d="M3 17c3 0 4-10 9-10s6 10 9 10"/><circle cx="3" cy="17" r="1.6" fill="currentColor"/><circle cx="21" cy="17" r="1.6" fill="currentColor"/></symbol>
-  <symbol id="grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></symbol>
-  <symbol id="clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
-  <symbol id="steps" viewBox="0 0 24 24"><path d="M4 18h5v-5h5V8h6"/></symbol>
-  <symbol id="map" viewBox="0 0 24 24"><path d="M12 21s7-6.2 7-11.5A7 7 0 0 0 5 9.5C5 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></symbol>
-  <symbol id="star" viewBox="0 0 24 24"><path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/></symbol>
-  <symbol id="book" viewBox="0 0 24 24"><path d="M4 4h6a3 3 0 0 1 3 3v13a2 2 0 0 0-2-2H4z"/><path d="M20 4h-4a3 3 0 0 0-3 3v13a2 2 0 0 1 2-2h5z"/></symbol>
-  <symbol id="info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8v.01"/></symbol>
+  <symbol id="logo" viewBox="0 0 24 24"><path d="M4 18L10 8l4 6 6-10"/></symbol>
+  <symbol id="info" viewBox="0 0 24 24"><path d="M12 3l9 16H3z"/><path d="M12 10v4M12 17v.01"/></symbol>
   <symbol id="back" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></symbol>
   <symbol id="dl" viewBox="0 0 24 24"><path d="M12 4v12M6 11l6 6 6-6M5 21h14"/></symbol>
 </svg>
 
-<aside class="side">
-  <div class="brand"><div class="lg"><svg class="i" style="width:24px;height:24px;stroke-width:2.4"><use href="#logo"/></svg></div><div><b>FLUXO</b><span>Performance Logística</span></div></div>
-  <div class="nlab">PAINEL</div>
-  <nav class="nav">
-    <a href="#visao" class="on"><svg class="i"><use href="#grid"/></svg>Visão geral</a>
-    <a href="#prazo"><svg class="i"><use href="#clock"/></svg>Prazo</a>
-    <a href="#etapas"><svg class="i"><use href="#steps"/></svg>Etapas</a>
-    <a href="#estados"><svg class="i"><use href="#map"/></svg>Estados</a>
-    <a href="#cliente"><svg class="i"><use href="#star"/></svg>Cliente</a>
-    <a href="#metodologia"><svg class="i"><use href="#book"/></svg>Metodologia</a>
-  </nav>
-  <div class="sfoot"><b><i></i>Dados públicos</b>Olist · 94.838 pedidos entregues · jan/2017 a ago/2018<br><a href="https://erickkamorim.github.io/"><svg class="i" style="width:15px;height:15px"><use href="#back"/></svg>Portfólio do Erick</a></div>
-</aside>
-
-<main>
-  <div class="mbrand"><div class="lg"><svg class="i" style="width:20px;height:20px;stroke-width:2.4"><use href="#logo"/></svg></div><b>FLUXO</b></div>
-  <div class="topf"><div class="wrap">
+<header class="head">
+  <div class="wrap bar">
+    <a href="#visao" class="logo"><i><svg class="i" style="stroke-width:2.6"><use href="#logo"/></svg></i>FLUXO<small>Torre de controle logística</small></a>
+    <nav class="tabs" aria-label="Seções">
+      <a href="#visao" class="on">Visão geral</a><a href="#prazo">Prazo</a><a href="#etapas">Etapas</a><a href="#estados">Estados</a><a href="#cliente">Cliente</a><a href="#metodologia">Metodologia</a>
+    </nav>
+    <a class="port" href="https://erickkamorim.github.io/"><svg class="i" style="width:14px;height:14px"><use href="#back"/></svg>PORTFÓLIO</a>
+  </div>
+  <div class="fil"><div class="wrap">
+    <span class="fl">Filtros</span>
     <div class="seg" id="per" role="group" aria-label="Período"><button data-p="all" class="on">Tudo</button><button data-p="2017">2017</button><button data-p="2018">2018</button><button data-p="6m">6 meses</button></div>
-    <label class="sel">Estado <select id="uf" aria-label="Estado do cliente"><option value="">Brasil</option></select></label>
+    <select id="uf" aria-label="Estado do cliente"><option value="">Brasil · todos os estados</option></select>
     <button class="reset" id="reset" type="button">Limpar</button>
     <span class="fnote" id="fnote"></span>
   </div></div>
+</header>
 
-  <div class="wrap">
-    <section id="visao" class="hero">
-      <h1>Visão geral</h1>
-      <p>Nível de serviço de um e-commerce brasileiro: quanto chega no prazo, onde o tempo de entrega é gasto e quanto o atraso custa na satisfação do cliente.</p>
-      <div class="kpis" id="kpis"></div>
-      <div class="insight" id="insight"></div>
-    </section>
+<main class="wrap">
+  <section id="visao" class="status">
+    <div class="tag"><i></i>Status da operação · dados Olist</div>
+    <h1>Quanto chega no prazo, onde o tempo vai e quanto o atraso custa.</h1>
+    <p>Cerca de 95 mil pedidos reais de um e-commerce brasileiro, de jan/2017 a ago/2018. Use os filtros acima para ver um período ou estado específico.</p>
+    <div class="kpis" id="kpis"></div>
+    <div class="insight"><span class="lbl2">LEITURA</span><div id="insight"></div></div>
+  </section>
 
-    <section id="prazo" class="blk">
-      <div class="bh"><div class="ic"><svg class="i"><use href="#clock"/></svg></div><div><h2>Prazo</h2><p>Nível de serviço e volume mês a mês</p></div></div>
-      <div class="grid">
-        <div class="card c12"><h3>Entregas no prazo por mês</h3><p class="d">% de pedidos entregues até a data prometida ao cliente. O ponto marca o pior mês do filtro.</p><div class="chart" id="ch-otd"></div>
-          <details class="tbl"><summary>Ver tabela</summary><div id="tb-otd"></div></details></div>
-        <div class="card c12"><h3>Pedidos entregues por mês</h3><p class="d">Volume no período e estado selecionados. Em destaque, o mês de maior volume.</p><div class="chart" id="ch-vol"></div></div>
+  <section id="prazo" class="blk">
+    <div class="sh"><span class="n">01</span><h2>Prazo</h2><p>Nível de serviço e volume mês a mês</p></div>
+    <div class="grid">
+      <div class="card c12"><h3>Entregas no prazo por mês</h3><p class="d">% de pedidos entregues até a data prometida. O ponto marca o pior mês do filtro.</p><div class="chart" id="ch-otd"></div>
+        <details class="tbl"><summary>[ VER TABELA ]</summary><div id="tb-otd"></div></details></div>
+      <div class="card c12"><h3>Pedidos entregues por mês</h3><p class="d">Volume no período e estado selecionados. Em destaque, o mês de maior volume.</p><div class="chart" id="ch-vol"></div></div>
+    </div>
+  </section>
+
+  <section id="etapas" class="blk">
+    <div class="sh"><span class="n">02</span><h2>Etapas</h2><p>Da compra à entrega</p></div>
+    <div class="grid">
+      <div class="card c6"><h3>Onde o tempo vai</h3><p class="d">Dias médios em cada etapa</p><div class="chart" id="ch-etapas"></div></div>
+      <div class="card c6"><h3>Postagem do vendedor</h3><p class="d">% entregue com atraso, conforme o vendedor postou dentro ou depois do limite</p><div class="chart" id="ch-post"></div></div>
+    </div>
+  </section>
+
+  <section id="estados" class="blk">
+    <div class="sh"><span class="n">03</span><h2>Estados</h2><p>Onde o cliente recebe com mais atraso</p></div>
+    <div class="alert"><svg class="i"><use href="#info"/></svg>Clique em um estado para filtrar o painel inteiro. Aparecem os estados com 50 ou mais pedidos no período.</div>
+    <div class="card c12"><h3>% de pedidos atrasados por estado do cliente</h3><p class="d">Ordenado do maior para o menor atraso</p><div class="chart" id="ch-uf"></div></div>
+  </section>
+
+  <section id="cliente" class="blk">
+    <div class="sh"><span class="n">04</span><h2>Cliente</h2><p>O peso do atraso na avaliação</p></div>
+    <div class="card c12"><h3>Nota média por faixa de atraso</h3><p class="d">Avaliação de 1 a 5 deixada pelo cliente após a entrega</p><div class="chart" id="ch-nota"></div></div>
+  </section>
+
+  <section id="metodologia" class="blk">
+    <div class="sh"><span class="n">05</span><h2>Metodologia</h2><p>Como os números foram calculados</p></div>
+    <div class="met">
+      <div class="card"><h3>Regras e tratamento</h3>
+        <ul>
+          <li><b>Base:</b> pedidos com status "entregue" e todas as datas preenchidas. Registros com postagem anterior à aprovação foram descartados.</li>
+          <li><b>No prazo:</b> entrega ao cliente até a data estimada informada na compra.</li>
+          <li><b>Etapas:</b> aprovação (compra → pagamento), postagem (aprovação → transportadora) e transporte (transportadora → cliente).</li>
+          <li><b>Postagem fora do limite:</b> entrega à transportadora depois do prazo de postagem do item.</li>
+          <li><b>Ferramentas:</b> SQL (SQLite) para modelar e validar, Python para tratar e agregar, e um painel web próprio em JavaScript.</li>
+        </ul>
+        <a class="btn pri" href="dados/base_entregas_olist.csv" download><svg class="i"><use href="#dl"/></svg>Base tratada (CSV)</a>
+        <a class="btn out" href="https://erickkamorim.github.io/analise-pedidos-sql/">Análise em SQL (LUPA)</a>
       </div>
-    </section>
-
-    <section id="etapas" class="blk">
-      <div class="bh"><div class="ic"><svg class="i"><use href="#steps"/></svg></div><div><h2>Etapas</h2><p>Da compra à entrega: onde o tempo vai e o peso do vendedor</p></div></div>
-      <div class="grid">
-        <div class="card c6"><h3>Onde o tempo vai</h3><p class="d">Dias médios em cada etapa</p><div class="chart" id="ch-etapas"></div></div>
-        <div class="card c6"><h3>Postagem do vendedor</h3><p class="d">% entregue com atraso, conforme o vendedor postou dentro ou depois do limite</p><div class="chart" id="ch-post"></div></div>
+      <div class="card"><h3>Fonte dos dados</h3>
+        <p>Brazilian E-Commerce Public Dataset by Olist, publicado no Kaggle sob a licença CC BY-NC-SA 4.0. São pedidos reais e anonimizados de 2016 a 2018. O painel usa jan/2017 a ago/2018, meses com volume consistente.</p>
+        <a class="btn out" href="https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce" target="_blank" rel="noopener">Dataset no Kaggle</a>
       </div>
-    </section>
-
-    <section id="estados" class="blk">
-      <div class="bh"><div class="ic"><svg class="i"><use href="#map"/></svg></div><div><h2>Estados</h2><p>Onde o cliente recebe com mais atraso</p></div></div>
-      <div class="note"><svg class="i"><use href="#info"/></svg><span>Clique em um estado para filtrar o painel inteiro. Este gráfico mostra todos os estados com 50 ou mais pedidos no período, com o selecionado em destaque.</span></div>
-      <div class="card c12"><h3>% de pedidos atrasados por estado do cliente</h3><p class="d">Ordenado do maior para o menor atraso</p><div class="chart" id="ch-uf"></div></div>
-    </section>
-
-    <section id="cliente" class="blk">
-      <div class="bh"><div class="ic"><svg class="i"><use href="#star"/></svg></div><div><h2>Cliente</h2><p>O quanto o atraso pesa na avaliação</p></div></div>
-      <div class="card c12"><h3>Nota média por faixa de atraso</h3><p class="d">Avaliação de 1 a 5 deixada pelo cliente após a entrega</p><div class="chart" id="ch-nota"></div></div>
-    </section>
-
-    <section id="metodologia" class="blk">
-      <div class="bh"><div class="ic"><svg class="i"><use href="#book"/></svg></div><div><h2>Metodologia</h2><p>Como os números foram calculados</p></div></div>
-      <div class="met">
-        <div class="card"><h3>Regras e tratamento</h3>
-          <ul>
-            <li><b>Base:</b> pedidos com status "entregue" e todas as datas preenchidas. Registros com postagem anterior à aprovação foram descartados.</li>
-            <li><b>No prazo:</b> entrega ao cliente até a data estimada informada na compra.</li>
-            <li><b>Etapas:</b> aprovação (compra → pagamento), postagem (aprovação → transportadora) e transporte (transportadora → cliente).</li>
-            <li><b>Postagem fora do limite:</b> entrega à transportadora depois do prazo de postagem do item.</li>
-            <li><b>Ferramentas:</b> SQL (SQLite) para modelar e validar, Python para tratar e agregar, e um painel web próprio.</li>
-          </ul>
-          <a class="btn pri" href="dados/base_entregas_olist.csv" download><svg class="i"><use href="#dl"/></svg>Base tratada (CSV)</a>
-          <a class="btn out" href="https://erickkamorim.github.io/analise-pedidos-sql/">Análise em SQL</a>
-        </div>
-        <div class="card"><h3>Fonte dos dados</h3>
-          <p>Brazilian E-Commerce Public Dataset by Olist, publicado no Kaggle sob a licença CC BY-NC-SA 4.0. São pedidos reais e anonimizados de 2016 a 2018. O painel usa jan/2017 a ago/2018, meses com volume consistente.</p>
-          <a class="btn out" href="https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce" target="_blank" rel="noopener">Dataset no Kaggle</a>
-        </div>
-      </div>
-      <footer><span>FLUXO · projeto de portfólio de <a href="https://erickkamorim.github.io/">Erick Amorim</a></span><span>Dados: Olist (CC BY-NC-SA 4.0)</span></footer>
-    </section>
-  </div>
+    </div>
+  </section>
+  <footer><span>FLUXO · projeto de portfólio de <a href="https://erickkamorim.github.io/">Erick Amorim</a></span><span>DADOS: OLIST (CC BY-NC-SA 4.0)</span></footer>
 </main>
-
-<nav class="mnav" aria-label="Navegação">
-  <a href="#visao" class="on" aria-label="Visão geral"><svg class="i"><use href="#grid"/></svg></a>
-  <a href="#prazo" aria-label="Prazo"><svg class="i"><use href="#clock"/></svg></a>
-  <a href="#etapas" aria-label="Etapas"><svg class="i"><use href="#steps"/></svg></a>
-  <a href="#estados" aria-label="Estados"><svg class="i"><use href="#map"/></svg></a>
-  <a href="#cliente" aria-label="Cliente"><svg class="i"><use href="#star"/></svg></a>
-  <a href="#metodologia" aria-label="Metodologia"><svg class="i"><use href="#book"/></svg></a>
-</nav>
 
 <div class="tip" id="tip"></div>
 <script>
@@ -260,14 +239,14 @@ function lineChart(id,pts,{fmtY,yMin,yMax,ticks,label,tipFn}){
   if(!pts.length){box.innerHTML='<div class="empty">Sem dados para este filtro</div>';return}
   const x=i=>L+(pts.length===1?(w-L-R)/2:i*(w-L-R)/(pts.length-1));const y=v=>T+(1-(v-yMin)/(yMax-yMin))*(h-T-B);
   const g=el('g',{class:'ax'},s);
-  ticks.forEach(t=>{el('line',{x1:L,x2:w-R,y1:y(t),y2:y(t),stroke:'#1a1f29'},g);const tx=el('text',{x:L-8,y:y(t)+4,'text-anchor':'end'},g);tx.textContent=fmtY(t)});
+  ticks.forEach(t=>{el('line',{x1:L,x2:w-R,y1:y(t),y2:y(t),stroke:'#16264a'},g);const tx=el('text',{x:L-8,y:y(t)+4,'text-anchor':'end'},g);tx.textContent=fmtY(t)});
   const step=Math.ceil(pts.length/(w<500?5:10));
   pts.forEach((p,i)=>{if(i%step===0||i===pts.length-1){const tx=el('text',{x:x(i),y:h-8,'text-anchor':'middle'},g);tx.textContent=mlabel(p.m)}});
-  el('path',{d:pts.map((p,i)=>(i?'L':'M')+x(i)+','+y(p.v)).join(''),fill:'none',stroke:'#2ee6c5','stroke-width':2.2,'stroke-linejoin':'round','stroke-linecap':'round'},s);
+  el('path',{d:pts.map((p,i)=>(i?'L':'M')+x(i)+','+y(p.v)).join(''),fill:'none',stroke:'#ff6a2b','stroke-width':2.2,'stroke-linejoin':'round','stroke-linecap':'round'},s);
   const minI=pts.reduce((a,p,i)=>p.v<pts[a].v?i:a,0);
-  el('circle',{cx:x(minI),cy:y(pts[minI].v),r:5,fill:'#0e1117',stroke:'#2ee6c5','stroke-width':2},s);
+  el('circle',{cx:x(minI),cy:y(pts[minI].v),r:5,fill:'#0d1a31',stroke:'#ff6a2b','stroke-width':2},s);
   const lt=el('text',{x:x(minI),y:y(pts[minI].v)+20,'text-anchor':'middle',class:'lbl'},s);lt.textContent='mín. '+fmtY(pts[minI].v)+' · '+mlabel(pts[minI].m);
-  const cross=el('line',{y1:T,y2:h-B,stroke:'#2f3643','stroke-dasharray':'3 4',opacity:0},s);const dot=el('circle',{r:5,fill:'#2ee6c5',stroke:'#0e1117','stroke-width':2,opacity:0},s);
+  const cross=el('line',{y1:T,y2:h-B,stroke:'#3a4f78','stroke-dasharray':'3 4',opacity:0},s);const dot=el('circle',{r:5,fill:'#ff6a2b',stroke:'#0d1a31','stroke-width':2,opacity:0},s);
   const hit=el('rect',{x:L,y:T,width:w-L-R,height:h-T-B,class:'hit'},s);
   function mv(ev){const r=s.getBoundingClientRect();const px=(ev.clientX-r.left)*w/r.width;let i=Math.round((px-L)/((w-L-R)/Math.max(1,pts.length-1)));i=Math.max(0,Math.min(pts.length-1,i));cross.setAttribute('x1',x(i));cross.setAttribute('x2',x(i));cross.setAttribute('opacity',1);dot.setAttribute('cx',x(i));dot.setAttribute('cy',y(pts[i].v));dot.setAttribute('opacity',1);showTip(ev,tipFn(pts[i]),box)}
   hit.addEventListener('mousemove',mv);hit.addEventListener('touchstart',e=>mv(e.touches[0]),{passive:true});hit.addEventListener('mouseleave',()=>{cross.setAttribute('opacity',0);dot.setAttribute('opacity',0);hideTip()});
@@ -278,10 +257,10 @@ function colChart(id,pts,tipFn){
   if(!pts.length){box.innerHTML='<div class="empty">Sem dados para este filtro</div>';return}
   const mx=Math.max(...pts.map(p=>p.v))*1.1||1;const bw=(w-L-R)/pts.length;const y=v=>T+(1-v/mx)*(h-T-B);
   const g=el('g',{class:'ax'},s);const tk=[0,mx/2,mx].map(v=>Math.round(v/100)*100);
-  tk.forEach(t=>{el('line',{x1:L,x2:w-R,y1:y(t),y2:y(t),stroke:'#1a1f29'},g);const tx=el('text',{x:L-8,y:y(t)+4,'text-anchor':'end'},g);tx.textContent=ni(t)});
+  tk.forEach(t=>{el('line',{x1:L,x2:w-R,y1:y(t),y2:y(t),stroke:'#16264a'},g);const tx=el('text',{x:L-8,y:y(t)+4,'text-anchor':'end'},g);tx.textContent=ni(t)});
   const step=Math.ceil(pts.length/(w<500?5:10));
   const mi=pts.reduce((a,p,i)=>p.v>pts[a].v?i:a,0);
-  pts.forEach((p,i)=>{const bx=L+i*bw+1,bww=Math.max(2,bw-2);el('path',{d:roundTop(bx,y(p.v),bww,h-B-y(p.v),4),fill:i===mi?'#2ee6c5':'#394150'},s);
+  pts.forEach((p,i)=>{const bx=L+i*bw+1,bww=Math.max(2,bw-2);el('path',{d:roundTop(bx,y(p.v),bww,h-B-y(p.v),4),fill:i===mi?'#ff6a2b':'#2b3d5e'},s);
     if(i%step===0||i===pts.length-1){const tx=el('text',{x:bx+bww/2,y:h-8,'text-anchor':'middle'},g);tx.textContent=mlabel(p.m)}
     const ht=el('rect',{x:L+i*bw,y:T,width:bw,height:h-T-B,class:'hit'},s);ht.addEventListener('mousemove',ev=>showTip(ev,tipFn(p),box));ht.addEventListener('mouseleave',hideTip)});
   const lt=el('text',{x:L+mi*bw+bw/2,y:y(pts[mi].v)-6,'text-anchor':'middle',class:'lbl'},s);lt.textContent=ni(pts[mi].v);
@@ -293,9 +272,9 @@ function barH(id,items,{fmt,max,onClick,selKey,rowH=30,labelW=150,tipFn,colorFn}
   const mx=max||Math.max(...items.map(d=>d.v))*1.15||1;const L=labelW,R=56;
   items.forEach((d,i)=>{const yy=4+i*rowH;const bh=rowH-10;
     const t=el('text',{x:L-10,y:yy+bh/2+4,'text-anchor':'end',class:'lbl m'},s);t.textContent=d.lab||d.k;
-    el('rect',{x:L,y:yy,width:w-L-R,height:bh,rx:4,fill:'#141820'},s);
+    el('rect',{x:L,y:yy,width:w-L-R,height:bh,rx:4,fill:'#12223e'},s);
     const bw=Math.max(2,(d.v/mx)*(w-L-R));const sel=selKey&&d.key===selKey;
-    el('path',{d:roundRight(L,yy,bw,bh,4),fill:colorFn?colorFn(d,i,sel):(sel?'#2ee6c5':'#394150')},s);
+    el('path',{d:roundRight(L,yy,bw,bh,4),fill:colorFn?colorFn(d,i,sel):(sel?'#ff6a2b':'#2b3d5e')},s);
     const v=el('text',{x:L+bw+8,y:yy+bh/2+4,class:'lbl'},s);v.textContent=fmt(d.v);
     const ht=el('rect',{x:0,y:yy-4,width:w,height:rowH,class:'hit'},s);
     if(tipFn){ht.addEventListener('mousemove',ev=>showTip(ev,tipFn(d),box));ht.addEventListener('mouseleave',hideTip)}
@@ -307,7 +286,7 @@ function render(){
   const rows=filt();const A=agg(rows);
   document.querySelectorAll('#per button').forEach(b=>b.classList.toggle('on',b.dataset.p===st.p));sel.value=st.uf;
   const ms=CUBE.months.filter((m,i)=>monthOk(i));
-  document.getElementById('fnote').textContent=(ms.length?mlabel(ms[0])+' a '+mlabel(ms[ms.length-1]):'')+' · '+(st.uf?UFN[st.uf]:'Brasil');
+  document.getElementById('fnote').innerHTML='<b>●</b> '+(ms.length?mlabel(ms[0])+' → '+mlabel(ms[ms.length-1]):'')+' · '+(st.uf?UFN[st.uf].toUpperCase():'BRASIL');
   const late=A.n-A.ok;
   const k=[
     ['hero','Entregues no prazo',A.n?nf(100*A.ok/A.n):'–','%',ni(A.ok)+' de '+ni(A.n)],
@@ -330,11 +309,11 @@ function render(){
   // stages
   const tot=(A.ap+A.po+A.tr)||1;
   const et=[{k:'Aprovação',v:A.n?A.ap/A.n:0,s:A.ap/tot},{k:'Vendedor posta',v:A.n?A.po/A.n:0,s:A.po/tot},{k:'Transporte',v:A.n?A.tr/A.n:0,s:A.tr/tot}];
-  barH('ch-etapas',A.n?et:[],{fmt:v=>nf(v)+' d',labelW:110,rowH:46,colorFn:(d,i)=>i===2?'#2ee6c5':'#394150',tipFn:d=>`<b>${d.k}</b>${nf(d.v)} dias em média<br><span>${nf(100*d.s,0)}% do tempo total</span>`});
+  barH('ch-etapas',A.n?et:[],{fmt:v=>nf(v)+' d',labelW:110,rowH:46,colorFn:(d,i)=>i===2?'#ff6a2b':'#2b3d5e',tipFn:d=>`<b>${d.k}</b>${nf(d.v)} dias em média<br><span>${nf(100*d.s,0)}% do tempo total</span>`});
 
   // seller posting
   const po=[0,1].map(f=>agg(rows.filter(r=>r[3]===f)));
-  barH('ch-post',A.n?[{k:'Dentro do limite',v:po[0].n?100*(po[0].n-po[0].ok)/po[0].n:0,n:po[0].n},{k:'Depois do limite',v:po[1].n?100*(po[1].n-po[1].ok)/po[1].n:0,n:po[1].n}]:[],{fmt:v=>nf(v)+'%',labelW:120,rowH:46,colorFn:(d,i)=>i===1?'#ff7a50':'#394150',tipFn:d=>`<b>Postou ${d.k.toLowerCase()}</b>${nf(d.v)}% entregues com atraso<br><span>${ni(d.n)} pedidos (${A.n?nf(100*d.n/A.n):0}% do total)</span>`});
+  barH('ch-post',A.n?[{k:'Dentro do limite',v:po[0].n?100*(po[0].n-po[0].ok)/po[0].n:0,n:po[0].n},{k:'Depois do limite',v:po[1].n?100*(po[1].n-po[1].ok)/po[1].n:0,n:po[1].n}]:[],{fmt:v=>nf(v)+'%',labelW:120,rowH:46,colorFn:(d,i)=>i===1?'#ff6a2b':'#2b3d5e',tipFn:d=>`<b>Postou ${d.k.toLowerCase()}</b>${nf(d.v)}% entregues com atraso<br><span>${ni(d.n)} pedidos (${A.n?nf(100*d.n/A.n):0}% do total)</span>`});
 
   // by UF (ignores UF filter)
   const ru=filt(false);
@@ -345,7 +324,7 @@ function render(){
   // rating by delay band
   const fx=['No prazo','1 a 3 dias','4 a 7 dias','Mais de 7 dias'];
   const nb=[0,1,2,3].map(f=>{const a=agg(rows.filter(r=>r[2]===f));return{k:fx[f],v:a.nn?a.ns/a.nn:0,n:a.nn}}).filter(d=>d.n>0);
-  barH('ch-nota',nb,{fmt:v=>nf(v,2),max:5,labelW:110,rowH:44,colorFn:(d,i)=>['#2ee6c5','#22b39a','#187f6e','#0f5247'][fx.indexOf(d.k)],tipFn:d=>`<b>${d.k}</b>nota média ${nf(d.v,2)}<br><span>${ni(d.n)} avaliações</span>`});
+  barH('ch-nota',nb,{fmt:v=>nf(v,2),max:5,labelW:110,rowH:44,colorFn:(d,i)=>['#ff6a2b','#d9561f','#a84317','#73300f'][fx.indexOf(d.k)],tipFn:d=>`<b>${d.k}</b>nota média ${nf(d.v,2)}<br><span>${ni(d.n)} avaliações</span>`});
 
   // insight
   const r0=po[0].n?(po[0].n-po[0].ok)/po[0].n:0,r1=po[1].n?(po[1].n-po[1].ok)/po[1].n:0;
@@ -363,8 +342,8 @@ render();
 
 (function(){
   const ids=['visao','prazo','etapas','estados','cliente','metodologia'];
-  const lists=[document.querySelectorAll('.nav a'),document.querySelectorAll('.mnav a')];
-  function spy(){let y=scrollY+innerHeight*.3,idx=0;ids.forEach((id,i)=>{const s=document.getElementById(id);if(s.getBoundingClientRect().top+scrollY<=y)idx=i});if(innerHeight+scrollY>=document.body.scrollHeight-4)idx=ids.length-1;lists.forEach(l=>l.forEach((a,i)=>a.classList.toggle('on',i===idx)))}
+  const L=document.querySelectorAll('.tabs a');
+  function spy(){let y=scrollY+innerHeight*.3,idx=0;ids.forEach((id,i)=>{const s=document.getElementById(id);if(s.getBoundingClientRect().top+scrollY<=y)idx=i});if(innerHeight+scrollY>=document.body.scrollHeight-4)idx=ids.length-1;L.forEach((a,i)=>a.classList.toggle('on',i===idx))}
   addEventListener('scroll',spy,{passive:true});spy();
 })();
 </script>
